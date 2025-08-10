@@ -1,1 +1,39 @@
+# DHCP Server Configuration File
+# Example for lab/testing environment
+# Author: Angel Pomales
+# Date: 2025-08-10
+
+# Global DHCP settings
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+
+# DNS and gateway options (replace with lab values)
+option domain-name "lab.local";
+option domain-name-servers 192.168.1.10, 192.168.1.11;
+option routers 192.168.1.1;
+
+# VLAN 10 - Sales Department
+subnet 192.168.10.0 netmask 255.255.255.0 {
+    range 192.168.10.50 192.168.10.100;
+    option subnet-mask 255.255.255.0;
+}
+
+# VLAN 20 - Engineering Department
+subnet 192.168.20.0 netmask 255.255.255.0 {
+    range 192.168.20.50 192.168.20.100;
+    option subnet-mask 255.255.255.0;
+}
+
+# VLAN 30 - Printers
+subnet 192.168.30.0 netmask 255.255.255.0 {
+    range 192.168.30.50 192.168.30.60;
+    option subnet-mask 255.255.255.0;
+}
+
+# Static host example
+host fileserver {
+    hardware ethernet 00:11:22:33:44:55;
+    fixed-address 192.168.20.10;
+}
 
