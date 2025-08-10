@@ -1,0 +1,36 @@
+; BIND9 DNS Configuration - Example for lab environment
+; Author: Angel Pomales
+; Date: 2025-08-10
+
+$TTL    86400
+@       IN      SOA     ns1.lab.local. admin.lab.local. (
+                        2025080901 ; Serial (YYYYMMDD##)
+                        3600       ; Refresh
+                        1800       ; Retry
+                        1209600    ; Expire
+                        86400 )    ; Minimum TTL
+
+; Name servers
+        IN      NS      ns1.lab.local.
+        IN      NS      ns2.lab.local.
+
+; A Records for name servers
+ns1     IN      A       192.168.1.10
+ns2     IN      A       192.168.1.11
+
+; VLAN 10 - Sales
+sales-pc1   IN  A       192.168.10.51
+sales-pc2   IN  A       192.168.10.52
+
+; VLAN 20 - Engineering
+eng-pc1     IN  A       192.168.20.51
+eng-pc2     IN  A       192.168.20.52
+fileserver  IN  A       192.168.20.10
+
+; VLAN 30 - Printers
+printer1    IN  A       192.168.30.51
+printer2    IN  A       192.168.30.52
+
+; CNAME Examples
+www         IN  CNAME   fileserver.lab.local.
+intranet    IN  CNAME   sales-pc1.lab.local.
