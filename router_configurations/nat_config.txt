@@ -1,1 +1,36 @@
+# NAT Configuration - Example for lab network
+# Author: Angel Pomales
+# Date: 2025-08-10
+# Description: This configuration enables Internet access for internal VLANs
+#              by translating private IPs to the router's public IP.
+
+# WAN interface (connected to the Internet)
+WAN_IFACE=eth0
+
+# LAN interface (internal network/VLAN trunk)
+LAN_IFACE=eth1
+
+# Flush existing NAT rules
+iptables -t nat -F
+iptables -t nat -X
+
+# Enable IP forwarding
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Configure MASQUERADE for VLAN subnets
+iptables -t nat -A POSTROUTING -o $WAN_IFACE -s 192.168.10.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o $WAN_IFACE -s 192.168.20.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o $WAN_IFACE -s 192.168.30.0/24 -j MASQUERADE
+
+# Optional: Allow related and established connections
+iptables -A FORWARD -i $WAN_IFACE -o $LAN_IFACE -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Optional: Allow internal VLAN traffic to reach the Internet
+iptables -A FORWARD -i $LAN_IFACE -o $WAN_IFACE -j ACCEPT
+
+# Save the configuration (varies by distro)
+# For Debian/Ubuntu:
+#   iptables-save > /etc/iptables/rules.v4
+# For RHEL/CentOS:
+#   service iptables save
 
