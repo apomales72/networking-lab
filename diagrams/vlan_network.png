@@ -1,1 +1,8 @@
+           [Router]
+               |
+         [Managed Switch]
+         /      |       \
+   VLAN 10   VLAN 20   VLAN 30
+  (Blue)     (Green)   (Orange)
+  PC1, PC2   Server1   Printer1
 
