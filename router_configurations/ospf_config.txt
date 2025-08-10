@@ -1,1 +1,40 @@
+# OSPF Configuration - Example for Lab Network
+# Author: Angel Pomales
+# Date: 2025-08-10
+# Description: Enables OSPF routing for VLANs 10, 20, and 30.
+#              Adjust router IDs, interfaces, and areas to match your topology.
+
+!
+hostname LabRouter
+!
+# Enable OSPF process with ID 1
+router ospf 1
+ router-id 1.1.1.1
+
+ # Advertise VLAN 10 network in Area 0
+ network 192.168.10.0 0.0.0.255 area 0
+
+ # Advertise VLAN 20 network in Area 0
+ network 192.168.20.0 0.0.0.255 area 0
+
+ # Advertise VLAN 30 network in Area 0
+ network 192.168.30.0 0.0.0.255 area 0
+
+ # Advertise WAN / Transit network in Area 0
+ network 203.0.113.0 0.0.0.255 area 0
+
+!
+# Optional: Set passive-interface on VLAN interfaces without neighbors
+passive-interface default
+no passive-interface GigabitEthernet0/0  # WAN / OSPF neighbor link
+
+!
+# Optional: Authentication for OSPF neighbors
+area 0 authentication message-digest
+interface GigabitEthernet0/0
+ ip ospf message-digest-key 1 md5 StrongPassword123
+ ip ospf authentication message-digest
+!
+
+end
 
