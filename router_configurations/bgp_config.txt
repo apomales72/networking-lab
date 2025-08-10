@@ -1,0 +1,40 @@
+# BGP Configuration - Example for Lab Network
+# Author: Angel Pomales
+# Date: 2025-08-10
+# Description: Configures eBGP with ISP and advertises lab networks.
+#              Adjust ASN, neighbor IP, and advertised prefixes to match your topology.
+
+!
+hostname LabRouter
+!
+# Local BGP Autonomous System Number (ASN)
+router bgp 65001
+ bgp log-neighbor-changes
+
+ # BGP router ID
+ bgp router-id 1.1.1.1
+
+ # eBGP Neighbor (ISP Connection)
+ neighbor 203.0.113.1 remote-as 65000
+ neighbor 203.0.113.1 description ISP-Provider
+ neighbor 203.0.113.1 password StrongBGPpass123
+
+ # Advertise VLAN networks (must be in routing table)
+ network 192.168.10.0 mask 255.255.255.0
+ network 192.168.20.0 mask 255.255.255.0
+ network 192.168.30.0 mask 255.255.255.0
+
+ # Advertise WAN transit network
+ network 203.0.113.0 mask 255.255.255.0
+
+ # Optional: Route filtering with prefix list
+ ip prefix-list LAB-NETS seq 5 permit 192.168.0.0/16 le 24
+ ip prefix-list LAB-NETS seq 10 permit 203.0.113.0/24
+ neighbor 203.0.113.1 prefix-list LAB-NETS out
+
+!
+# Optional: BGP timers for faster convergence (default is 60/180)
+neighbor 203.0.113.1 timers 10 30
+
+!
+end
