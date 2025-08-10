@@ -1,1 +1,6 @@
 
+[Your Laptop / Control Node]
+        |
+   [Router/Switch]
+   /      |      \
+[Server1][Server2][Server3]
