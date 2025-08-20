@@ -1,1 +1,52 @@
+🖧 Lab Overview
+
+We’ll create two virtual machines (or containers/VMs if you like) running RHEL.
+
+VM1 → Will have a static IP.
+
+VM2 → Will use DHCP.
+We’ll then verify connectivity with ping.
+
+Step 1. Check existing connections
+
+nmcli connection show
+
+This lists existing network connections (e.g., Wired connection 1).
+
+Step 2. Configure static IP on VM1
+
+# Replace "Wired connection 1" with your actual connection name
+nmcli con mod "Wired connection 1" ipv4.addresses 192.168.50.10/24
+nmcli con mod "Wired connection 1" ipv4.gateway 192.168.50.1
+nmcli con mod "Wired connection 1" ipv4.dns 8.8.8.8
+nmcli con mod "Wired connection 1" ipv4.method manual
+nmcli con up "Wired connection 1"
+
+Verify:
+
+ip addr show
+
+ping -c3 192.168.50.1   # Test gateway
+
+Step 3. Configure DHCP on VM2
+
+nmcli con mod "Wired connection 1" ipv4.method auto
+nmcli con up "Wired connection 1"
+
+Verify:
+
+ip addr show
+
+Step 4. Test connectivity between VMs
+
+On VM1:
+
+ping -c3 192.168.50.20   # Replace with VM2’s IP from DHCP
+
+On VM2:
+
+ping -c3 192.168.50.10
+
+
+✅ At this point, you’ve got a working lab: one static IP host and one DHCP host communicating.
 
